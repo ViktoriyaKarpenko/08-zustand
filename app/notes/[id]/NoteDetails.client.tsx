@@ -1,0 +1,60 @@
+'use client';
+
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { fetchNoteById } from '@/lib/api';
+import css from './NoteDetails.module.css';
+
+export default function NoteDetailsClient() {
+  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const from = searchParams.get('from');
+  const page = searchParams.get('page') ?? '1';
+
+  const handleBack = () => {
+    if (from) {
+      router.push(`${from}?page=${page}`);
+    } else {
+      router.back();
+    }
+  };
+
+  const {
+    data: note,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['note', id],
+    queryFn: () => fetchNoteById(id),
+    refetchOnMount: false,
+  });
+
+  if (isLoading) return <p>Loading, please wait...</p>;
+  if (isError || !note) return <p>Something went wrong.</p>;
+
+  return (
+    <main className={css.main}>
+      <div className={css.container}>
+        <div className={css.item}>
+          <div className={css.header}>
+            <h2>{note.title}</h2>
+            <button className={css.backBtn} onClick={handleBack}>
+              ← Back
+            </button>
+          </div>
+          <p className={css.tag}>{note.tag}</p>
+          <p className={css.content}>{note.content}</p>
+          <p className={css.date}>
+            {new Date(note.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+        </div>
+      </div>
+    </main>
+  );
+}
