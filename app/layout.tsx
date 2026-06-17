@@ -9,6 +9,16 @@ import TanStackProvider from '@/components/TanStackProvider/TanStackProvider';
 export const metadata: Metadata = {
   title: 'NoteHub',
   description: 'Simple and efficient application for managing personal notes',
+  openGraph: {
+    title: 'NoteHub',
+    description: 'Simple and efficient application for managing personal notes',
+    url: 'https://08-zustand-phi-rust.vercel.app',
+    images: [
+      {
+        url: 'https://notehub.app/og-image.png',
+      },
+    ],
+  },
 };
 
 const roboto = Roboto({
