@@ -23,16 +23,16 @@ export default function NotesClient({ tag }: NotesClientProps) {
   const page = Number(searchParams.get('page') ?? '1');
   const search = searchParams.get('search') ?? '';
 
-  const currentTag = slug?.[0] ?? 'all';
+  const currentSlug = slug?.[0] ?? 'all';
 
   const setPage = (newPage: number) => {
     router.replace(
-      `/notes/filter/${currentTag}?page=${newPage}&search=${search}`
+      `/notes/filter/${currentSlug}?page=${newPage}&search=${search}`
     );
   };
 
   const debouncedSetSearch = useDebouncedCallback((value: string) => {
-    router.replace(`/notes/filter/${currentTag}?page=1&search=${value}`);
+    router.replace(`/notes/filter/${currentSlug}?page=1&search=${value}`);
   }, 700);
 
   const { data, isLoading, isError } = useQuery({
